@@ -1,3 +1,6 @@
+<script>
+import todos from './api/todos.js';
+</script>
 <template>
   <div class="todoapp">
     <h1 class="todoapp__title">todos</h1>
@@ -139,3 +142,6 @@
     </article>
   </div>
 </template>
+
+<style>
+</style>
