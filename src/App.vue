@@ -1,5 +1,11 @@
 <script>
-import { createTodos, deleteTodos, getTodos, updateTodos } from "./api/todos.js";
+import {
+  createTodos,
+  deleteTodos,
+  getTodos,
+  updateTodos,
+} from "./api/todos.js";
+import Message from "./components/Message.vue";
 import StatusFiter from "./components/StatusFiter.vue";
 import TodoItem from "./components/TodoItem.vue";
 
@@ -7,12 +13,14 @@ export default {
   components: {
     StatusFiter,
     TodoItem,
+    Message,
   },
   data() {
     return {
       todos: [],
       title: "",
       status: "all",
+      errorMessage: "",
     };
   },
   computed: {
@@ -36,25 +44,31 @@ export default {
     },
   },
   mounted() {
-    getTodos().then(({ data }) => (this.todos = data));
+    getTodos()
+      .then(({ data }) => (this.todos = data))
+      .catch(() => {
+        this.errorMessage = "Unable to add a Todos";
+      });
   },
   methods: {
     handleSubmit() {
-      createTodos(this.title).then(({ data }) => this.todos = [...this.todos, data]);
+      createTodos(this.title).then(
+        ({ data }) => (this.todos = [...this.todos, data])
+      );
 
       this.title = "";
     },
     updateTodo({ id, title, completed }) {
-      updateTodos({ id, title, completed }).then(({ data }) =>
-        this.todos = this.todos.map((todo) => (todo.id != id ? todo : data))
+      updateTodos({ id, title, completed }).then(
+        ({ data }) =>
+          (this.todos = this.todos.map((todo) => (todo.id != id ? todo : data)))
       );
     },
     deleteTodo(todoId) {
-      deleteTodos(todoId)
-      .then(() => {
-        this.todos = this.todos.filter(todo => todo.id != todoId)
-      })
-    }
+      deleteTodos(todoId).then(() => {
+        this.todos = this.todos.filter((todo) => todo.id != todoId);
+      });
+    },
   },
 };
 </script>
@@ -101,14 +115,19 @@ export default {
       </footer>
     </div>
 
-    <article class="message is-danger message--hidden">
-      <div class="message-header">
-        <p>Error</p>
-        <button class="delete"></button>
-      </div>
-
-      <div class="message-body">Unable to add a Todo</div>
-    </article>
+    <Message
+      class="is-warning"
+      :active="errorMessage != ''"
+      @hide="errorMessage = ''"
+    >
+      <template #default>
+        <p>{{ errorMessage }}</p>
+      </template>
+      
+      <template #header>
+        <p>Server Error</p>
+      </template>
+    </Message>
   </div>
 </template>
 
