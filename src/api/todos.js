@@ -1,6 +1,24 @@
-export default [
-  {id: 1, title: 'HTML + CSS', completed: true},
-  {id: 2, title: 'JS', completed: false},
-  {id: 3, title: 'React', completed: false},
-  {id: 4, title: 'Vue.js', completed: false},
-];
+import { client } from "../../httpClient";
+
+export const getTodos = () => {
+  return client.get('/todos?userId=6342');
+}
+
+export const createTodos = (title) => {
+  return client.post('/todos', {
+    title,
+    completed: false,
+    userId: 6342,
+  });
+}
+
+export const updateTodos = ({id, title, completed}) => {
+  return client.patch(`/todos/${id}`, {
+    title,
+    completed,
+  });
+}
+
+export const deleteTodos = (todoId) => {
+  return client.delete(`/todos/${todoId}`);
+}
