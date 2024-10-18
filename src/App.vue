@@ -1,6 +1,7 @@
 <script>
 import {
   createTodos,
+  deleteCompletedTodos,
   deleteTodos,
   getTodos,
   updateTodos,
@@ -69,6 +70,12 @@ export default {
         this.todos = this.todos.filter((todo) => todo.id != todoId);
       });
     },
+    deleteAllCompleted() {
+      this.todos = this.todos.filter((todo) => !todo.completed);
+      
+      deleteCompletedTodos();
+
+    },
   },
 };
 </script>
@@ -96,7 +103,7 @@ export default {
 
       <TransitionGroup name="list" tag="section" class="todoapp__main">
         <TodoItem
-          v-for="(todo, index) of visibleTodos"
+          v-for="todo of visibleTodos"
           :key="todo.id"
           :todo="todo"
           @update="updateTodo"
@@ -109,7 +116,11 @@ export default {
 
         <StatusFiter v-model="status" />
 
-        <button v-if="activeTodos.length > 0" class="todoapp__clear-completed">
+        <button
+          @click="deleteAllCompleted"
+          v-if="activeTodos.length > 0"
+          class="todoapp__clear-completed"
+        >
           Clear completed
         </button>
       </footer>
@@ -123,7 +134,7 @@ export default {
       <template #default>
         <p>{{ errorMessage }}</p>
       </template>
-      
+
       <template #header>
         <p>Server Error</p>
       </template>

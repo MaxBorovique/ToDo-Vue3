@@ -22,3 +22,19 @@ export const updateTodos = ({id, title, completed}) => {
 export const deleteTodos = (todoId) => {
   return client.delete(`/todos/${todoId}`);
 };
+
+export const deleteCompletedTodos = async () => {
+  try {
+    const response = await client.get('/todos?userId=6342');
+    const todos = response.data;
+
+    const completedTodos = todos.filter(todo => todo.completed);
+
+    const deletePromises = completedTodos.map(todo => client.delete(`/todos/${todo.id}`));
+
+    await Promise.all(deletePromises);
+
+  } catch (error) {
+    console.error('', error);
+  }
+};
