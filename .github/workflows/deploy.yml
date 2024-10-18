@@ -11,12 +11,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3 
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm 
 
       - name: Install dependencies
         run: pnpm install
@@ -25,7 +28,7 @@ jobs:
         run: pnpm run build
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4  
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
