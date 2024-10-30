@@ -1,6 +1,6 @@
 # vue3-todo-app
 
-![DEMO](https://maxborovique.github.io/ToDo-Vue3/)
+[DEMO](https://maxborovique.github.io/ToDo-Vue3/)
 
 This template should help get you started developing with Vue 3 in Vite.
 
